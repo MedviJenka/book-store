@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from starlette.responses import RedirectResponse
 from backend.api.book import router
+from starlette.responses import RedirectResponse
 
 
 app = FastAPI()

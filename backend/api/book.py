@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
 from typing import List
 from fastapi import APIRouter
+from pydantic import UUID4
+
 from backend.api.schemas import BookSchema
 from backend.database.manager import BooksDB
 from backend.settings import API_VERSION
@@ -19,9 +21,14 @@ async def get_all_books() -> List[dict]:
     return book.get_all_books()
 
 
-@router.get('/book', response_model=BookSchema)
-async def get_book(schema: BookSchema) -> BookSchema:
-    return schema.model_dump()
+@router.get('/book_id', response_model=BookSchema)
+async def get_book_by_id(book_id: UUID4) -> BookSchema:
+    return book.get_book_by_id(book_id=book_id)
+
+
+@router.get('/book_title', response_model=BookSchema)
+async def get_book_by_title(book_title: str) -> BookSchema:
+    return book.get_book_by_title(book_title=book_title)
 
 
 @router.post('/book')

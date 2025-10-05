@@ -10,4 +10,4 @@ RUN uv sync
 
 # final backend stage
 FROM base AS backend
-CMD uvicorn backend.services.backend:app --host 0.0.0.0 --port 88
+CMD uvicorn backend.services.app:app --host 0.0.0.0 --port 88
