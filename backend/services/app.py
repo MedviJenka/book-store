@@ -1,13 +1,17 @@
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from backend.api.book import router
+from backend.api.v1.books.api import router, lifespan
 from starlette.responses import RedirectResponse
+from backend.settings import API_VERSION
+from backend.utils.logs import Logfire
 
 
-app = FastAPI()
+app = FastAPI(title='bookstore api service', version=API_VERSION, lifespan=lifespan)
 
 app.include_router(router=router)
+
+log = Logfire(name='api-app')
 
 
 class HeathResponseSchema(BaseModel):
