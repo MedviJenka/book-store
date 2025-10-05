@@ -1,0 +1,27 @@
+services:
+
+  backend:
+    container_name: backend-service
+    build:
+      context: .
+      target: backend
+    ports:
+      - "88:88"
+    restart: unless-stopped
+    networks:
+      - my_network
+    healthcheck:
+      test: curl -f localhost:88/health
+      retries: 3
+      interval: 10s
+    env_file:
+      - .env
+    labels:
+      type: api
+      component: backend
+
+networks:
+  my_network:
+
+volumes:
+  shared:

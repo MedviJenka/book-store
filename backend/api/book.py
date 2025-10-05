@@ -1,19 +1,55 @@
-from uuid import uuid4
+from datetime import datetime, timezone
+from typing import List
 from fastapi import APIRouter
+from backend.api.schemas import BookSchema
+from backend.database.manager import BooksDB
 from backend.settings import API_VERSION
-from pydantic import BaseModel, Field, UUID4
+from backend.utils.logs import Logfire
 
+
+log = Logfire(name='book-api')
 
 router = APIRouter(prefix=f'/api/{API_VERSION}')
 
-
-class BookSchema(BaseModel):
-    id: UUID4 = Field(default=uuid4())
-    title: str
-    author: str
+book = BooksDB()
 
 
-@router.post('/add_book')
-async def add_book(schema: BookSchema) -> dict:
+@router.get('/books')
+async def get_all_books() -> List[dict]:
+    return book.get_all_books()
+
+
+@router.get('/book', response_model=BookSchema)
+async def get_book(schema: BookSchema) -> BookSchema:
+    return schema.model_dump()
+
+
+@router.post('/book')
+async def add_book(title: str, author: str) -> None:
+    schema = BookSchema(title=title, author=author, publish_date=datetime.now(timezone.utc))
+    return book.add_book(schema=schema)
+
+
+@router.patch('/book')
+async def update_book(schema: BookSchema) -> dict:
     return schema.model_dump(mode='json')
 
+
+@router.delete('/book')
+async def delete_book(schema: BookSchema) -> None:
+    del schema.id
+
+
+# @router.get('/headers')
+# async def get_headers(accept:       str = Header(default=None),
+#                       content_type: str = Header(default='application/json'),
+#                       user_agent:   str = Header(default=None),
+#                       host:         str = Header(default=None)
+#                       ) -> dict:
+#     request_headers = {
+#         'Accept': accept,
+#         'Content-Type': content_type,
+#         'User': user_agent,
+#         'Host': host
+#     }
+#     return request_headers

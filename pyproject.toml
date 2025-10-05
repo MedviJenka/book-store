@@ -1,0 +1,13 @@
+[project]
+name = "back-to-basics"
+version = "1.0.0"
+description = "just releaning fastapi basics"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.118.0",
+    "logfire>=4.11.0",
+    "python-dotenv>=1.1.1",
+    "supabase>=2.21.1",
+    "uvicorn>=0.37.0",
+]
