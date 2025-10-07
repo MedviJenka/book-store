@@ -1,8 +1,8 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 from fastapi import APIRouter, FastAPI
 from backend.database.auth import Auth
 from backend.database.schemas import UserSchema
-from backend.security.access import create_access_token
+from backend.security.access import TokenManager
 from backend.utils.logs import Logfire
 from backend.settings import Config
 from contextlib import asynccontextmanager
@@ -44,10 +44,14 @@ async def create_user(email: str) -> None:
 
 
 @router.post('/login')
-async def login(email: str) -> None:
+async def login(email: str) -> Optional[UserSchema]:
     user = await auth.get_user_data_by_email_admin(email)
+    token = TokenManager(user_schema=UserSchema(email=email, is_created=True))
     if user is not None:
-        create_access_token(user_data=UserSchema(email=email, is_created=True))
+        token.create_access_token()
+
+    log.fire.info(f'user {email} was not found')
+    return UserSchema(email=email, is_created=False)
 
 
 @router.patch('/user')
