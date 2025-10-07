@@ -5,9 +5,7 @@ description = "just releaning fastapi basics"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "alembic>=1.16.5",
     "fastapi>=0.118.0",
-    "flake8>=7.3.0",
     "logfire>=4.11.0",
     "pydantic-settings>=2.11.0",
     "pydantic[email]>=2.11.10",
