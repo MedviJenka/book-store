@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from backend.settings import Config
 from backend.utils.logs import Logfire
 from starlette.responses import RedirectResponse
-from backend.api.v1.users.api import router, lifespan
+from backend.api.v1.auth.api import router, lifespan
 
 
 app = FastAPI(title='users api service', version=Config.API_VERSION, lifespan=lifespan)

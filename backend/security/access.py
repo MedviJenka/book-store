@@ -1,3 +1,5 @@
+from typing import Union
+
 import jwt
 from uuid import uuid4
 from datetime import timedelta, datetime
@@ -14,7 +16,7 @@ log = Logfire(name='token-session')
 class TokenManager:
 
     user_schema: UserSchema
-    expire: int = 3600
+    expire: Union[int, timedelta] = 3600
     refresh: bool = False
 
     def create_access_token(self) -> str:
