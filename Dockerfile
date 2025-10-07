@@ -1,4 +1,5 @@
 ARG VERSION=3.12-slim
+
 FROM python:$VERSION AS base
 WORKDIR /app
 ENV PATH="/app/.venv/bin:$PATH"
@@ -9,5 +10,5 @@ RUN uv sync
 
 
 # final backend stage
-FROM base AS backend
-CMD uvicorn backend.services.app:app --host 0.0.0.0 --port 88
+FROM base AS books
+CMD ["uvicorn", "backend.services.books:app", "--host", "0.0.0.0", "--port", "88"]

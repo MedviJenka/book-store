@@ -1,20 +1,21 @@
+from typing import Final
 from backend.database.auth import Auth
-from backend.database.manager import DatabaseManager
-from backend.settings import SUPABASE_JWT_TOKEN
 from backend.utils.logs import Logfire
+from dataclasses import dataclass
 
 
-log = Logfire(name='users-db')
+log = Logfire("database-config")
 
 
+@dataclass
 class UsersDatabase(Auth):
 
-    def create_user(self, email: str) -> None:
-        log.fire.info(f'user email: {email} created')
-        return self.send_magic_link(email=email)
+    __table_name__: Final = 'users'
 
-    def get_user_by_email(self) -> None:
-        return self.db.auth.get_user(SUPABASE_JWT_TOKEN)
+    def __post_init__(self) -> None:
+        super().__init__(admin=True)
 
-
-print(UsersDatabase().get_user_by_email())
+    def get_user_id_by_email(self, email: str) -> str:
+        result = self.get_user_data_by_email_admin(email).get('id')
+        log.fire.info(f'user {email} id is: {result}')
+        return result

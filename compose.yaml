@@ -3,10 +3,10 @@ name: bookstore
 services:
 
   backend:
-    container_name: backend-service
+    container_name: books-service
     build:
       context: .
-      target: backend
+      target: books
     ports:
       - "88:88"
     restart: unless-stopped

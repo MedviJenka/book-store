@@ -1,10 +1,10 @@
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 from pydantic import UUID4
+from typing import AsyncGenerator
 from fastapi import APIRouter, FastAPI
 from backend.utils.logs import Logfire
 from backend.settings import API_VERSION
 from backend.database.books import BooksDB
+from contextlib import asynccontextmanager
 
 
 log = Logfire(name='book-api')
