@@ -46,6 +46,7 @@ async def create_user(email: str) -> None:
 @router.post('/login')
 async def login(email: str) -> Optional[UserSchema]:
     user = await auth.get_user_data_by_email_admin(email)
+    log.fire.info(f'user: {user}')
     token = TokenManager(user_schema=UserSchema(email=email, is_created=True))
     if user is not None:
         token.create_access_token()

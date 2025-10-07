@@ -32,7 +32,7 @@ class Auth(DatabaseManager):
         users = data["users"]
         return users
 
-    async def get_user_data_by_email_admin(self, email: str) -> Optional[dict]:
+    def get_user_data_by_email_admin(self, email: str) -> Optional[dict]:
         headers = {"apikey": Config.SUPABASE_API_KEY, "Authorization": f"Bearer {Config.SUPABASE_ROLE_KEY}"}
         r = requests.get(self.url, headers=headers, params={"email": email}, timeout=10)
         r.raise_for_status()
