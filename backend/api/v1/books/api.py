@@ -4,14 +4,14 @@ from pydantic import UUID4
 from fastapi import APIRouter, FastAPI
 from backend.utils.logs import Logfire
 from datetime import datetime, timezone
-from backend.settings import API_VERSION
+from backend.settings import Config
 from backend.api.v1.books.schemas import BookSchema
 from backend.database.books import BooksDB
 
 
 log = Logfire(name='book-api')
 
-router = APIRouter(prefix=f'/api/{API_VERSION}')
+router = APIRouter(prefix=f'/api/{Config.API_VERSION}')
 
 book = BooksDB()
 

@@ -3,11 +3,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from backend.api.v1.users.api import router, lifespan
 from starlette.responses import RedirectResponse
-from backend.settings import API_VERSION
+from backend.settings import Config
 from backend.utils.logs import Logfire
 
 
-app = FastAPI(title='users api service', version=API_VERSION, lifespan=lifespan)
+app = FastAPI(title='users api service', version=Config.API_VERSION, lifespan=lifespan)
 
 app.include_router(router=router)
 
@@ -26,7 +26,7 @@ def root() -> RedirectResponse:
 
 @app.get('/health')
 def health() -> HeathResponseSchema:
-    return HeathResponseSchema().model_dump()
+    return HeathResponseSchema()
 
 
 if __name__ == "__main__":

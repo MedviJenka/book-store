@@ -1,6 +1,6 @@
 import logfire
 from dataclasses import dataclass, field
-from backend.settings import LOGFIRE_TOKEN
+from backend.settings import Config
 
 
 @dataclass
@@ -11,5 +11,5 @@ class Logfire:
 
     @property
     def fire(self) -> logfire:
-        self._logger = logfire.configure(service_name=self.name, token=LOGFIRE_TOKEN)
+        self._logger = logfire.configure(service_name=self.name, token=Config.LOGFIRE_TOKEN)
         return self._logger

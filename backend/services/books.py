@@ -3,11 +3,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from backend.api.v1.books.api import router, lifespan
 from starlette.responses import RedirectResponse
-from backend.settings import API_VERSION
+from backend.settings import Config
 from backend.utils.logs import Logfire
 
 
-app = FastAPI(title='bookstore api service', version=API_VERSION, lifespan=lifespan)
+app = FastAPI(title='bookstore api service', version=Config.API_VERSION, lifespan=lifespan)
 
 app.include_router(router=router)
 

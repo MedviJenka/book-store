@@ -1,18 +1,28 @@
 import os
 from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 load_dotenv()
 
 
-API_VERSION = os.getenv('API_VERSION')
+class Settings(BaseSettings):
 
-LOGFIRE_TOKEN = os.getenv('LOGFIRE_TOKEN')
+    model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
-SUPABASE_URL = os.getenv('SUPABASE_URL')
+    API_VERSION: str = os.getenv('API_VERSION')
 
-SUPABASE_API_KEY = os.getenv('SUPABASE_API_KEY')
+    LOGFIRE_TOKEN: str = os.getenv('LOGFIRE_TOKEN')
 
-SUPABASE_JWT_TOKEN = os.getenv('SUPABASE_JWT_TOKEN')
+    SUPABASE_URL: str = os.getenv('SUPABASE_URL')
 
-SUPABASE_ROLE_KEY = os.getenv('SUPABASE_ROLE_KEY')
+    SUPABASE_API_KEY: str = os.getenv('SUPABASE_API_KEY')
+
+    SUPABASE_JWT_TOKEN: str = os.getenv('SUPABASE_JWT_TOKEN')
+
+    SUPABASE_ROLE_KEY: str = os.getenv('SUPABASE_ROLE_KEY')
+
+    ALGORITHM: str = 'HS256'
+
+
+Config = Settings()
