@@ -2,7 +2,7 @@ name: bookstore
 
 services:
 
-  backend:
+  books:
     container_name: books-service
     build:
       context: .
@@ -14,6 +14,46 @@ services:
       - my_network
     healthcheck:
       test: curl -f localhost:88/health
+      retries: 3
+      interval: 10s
+    env_file:
+      - .env
+    labels:
+      type: api
+      component: backend
+
+  users:
+    container_name: user-service
+    build:
+      context: .
+      target: users
+    ports:
+      - "89:89"
+    restart: unless-stopped
+    networks:
+      - my_network
+    healthcheck:
+      test: curl -f localhost:89/health
+      retries: 3
+      interval: 10s
+    env_file:
+      - .env
+    labels:
+      type: api
+      component: backend
+
+  auth:
+    container_name: auth-service
+    build:
+      context: .
+      target: auth
+    ports:
+      - "90:90"
+    restart: unless-stopped
+    networks:
+      - my_network
+    healthcheck:
+      test: curl -f localhost:90/health
       retries: 3
       interval: 10s
     env_file:
