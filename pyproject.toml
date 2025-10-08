@@ -14,6 +14,3 @@ dependencies = [
     "supabase>=2.21.1",
     "uvicorn>=0.37.0",
 ]
-
-[tool.uv.dev-dependencies]
-pytest = "*"
