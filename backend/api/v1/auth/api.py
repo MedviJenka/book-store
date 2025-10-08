@@ -22,9 +22,9 @@ auth = Auth()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator:
-    log.fire.info('server started')
+    log.fire.info('auth server started')
     yield
-    log.fire.info('server stoped')
+    log.fire.info('auth server stoped')
 
 
 @router.post('/create-user')
@@ -35,22 +35,27 @@ async def create_user(email: str) -> None:
 
 @router.post('/login')
 async def login(email: str) -> UserSchema or JSONResponse:
+
     user = auth.get_user_data_by_email_admin(email)
     log.fire.info(f'user: {user}')
+    access_schema = UserSchema(email=email)
+    refresh_schema = UserSchema(email=email, is_created=True)
+
     if user is not None:
-        access_token = TokenManager(user_schema=UserSchema(email=email))
-        refresh_token = TokenManager(user_schema=UserSchema(email=email, is_created=True), refresh=True,
-                                     expire=timedelta(days=2))
+        access_token = TokenManager(user_schema=access_schema.model_dump())
+        refresh_token = TokenManager(user_schema=refresh_schema, refresh=True, expire=timedelta(days=2))
+        return access_token
 
-        access_token.create_access_token()
-        return JSONResponse(
-            content={
-                'message': 'login successful',
-                'email': email,
-                'access_token': access_token,
-                'refresh_token': refresh_token,
-            }
-        )
+        # access_token.create_access_token()
+        # return JSONResponse(
+        #     content={
+        #         'message': 'login successful',
+        #         'email': email,
+        #         'access_token': access_token,
+        #         'refresh_token': refresh_token,
+        #     }
+        # )
 
-    log.fire.info(f'user {email} was not found')
-    return UserSchema(email=email, is_created=False)
+    else:
+        log.fire.info(f'user {email} was not found')
+        raise

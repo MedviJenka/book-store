@@ -23,7 +23,7 @@ class TokenManager:
 
         payload = {
             'id': str(uuid4()),
-            'user': self.user_schema.model_dump(mode='json'),
+            'user': self.user_schema,
             'exp': datetime.now() + timedelta(seconds=self.expire),
             'refresh': self.refresh
         }

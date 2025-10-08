@@ -37,5 +37,4 @@ class Auth(DatabaseManager):
         r = requests.get(self.url, headers=headers, params={"email": email}, timeout=10)
         r.raise_for_status()
         data = r.json()
-        users = data["users"]
-        return users[0] if users else None
+        return data
