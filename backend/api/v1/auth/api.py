@@ -36,15 +36,15 @@ async def create_user(email: str) -> None:
 @router.post('/login')
 async def login(email: str) -> UserSchema or JSONResponse:
 
-    user = auth.get_user_data_by_email_admin(email)
+    user = users.get_user_data_by_email_admin(email)
     log.fire.info(f'user: {user}')
-    access_schema = UserSchema(email=email)
+    # access_schema = UserSchema(email=email)
     refresh_schema = UserSchema(email=email, is_created=True)
 
     if user is not None:
-        access_token = TokenManager(user_schema=access_schema.model_dump())
+        # access_token = TokenManager(user_schema=access_schema.model_dump())
         refresh_token = TokenManager(user_schema=refresh_schema, refresh=True, expire=timedelta(days=2))
-        return access_token
+        return refresh_token
 
         # access_token.create_access_token()
         # return JSONResponse(

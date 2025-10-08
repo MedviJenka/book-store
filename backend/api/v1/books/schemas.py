@@ -1,12 +1,12 @@
 from datetime import datetime
 from uuid import uuid4, UUID
-from typing import Optional, Union
+from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 
 
 class BookSchema(BaseModel):
 
-    id: Union[UUID, str] = Field(default_factory=uuid4)
+    id: UUID= Field(default_factory=uuid4)
     title: str
     author: str
     publisher: Optional[str] = ''

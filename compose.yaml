@@ -13,11 +13,14 @@ services:
     networks:
       - my_network
     healthcheck:
-      test: curl -f localhost:88/health
+      test: curl -f localhost:5000/health
       retries: 3
       interval: 10s
     env_file:
       - .env
+    depends_on:
+      - auth
+      - users
     labels:
       type: api
       component: backend
@@ -33,7 +36,7 @@ services:
     networks:
       - my_network
     healthcheck:
-      test: curl -f localhost:89/health
+      test: curl -f localhost:5001/health
       retries: 3
       interval: 10s
     env_file:
@@ -53,7 +56,7 @@ services:
     networks:
       - my_network
     healthcheck:
-      test: curl -f localhost:90/health
+      test: curl -f localhost:5002/health
       retries: 3
       interval: 10s
     env_file:

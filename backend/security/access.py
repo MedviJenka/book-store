@@ -1,6 +1,5 @@
-from typing import Union
-
 import jwt
+from typing import Union
 from uuid import uuid4
 from datetime import timedelta, datetime
 from backend.settings import Config

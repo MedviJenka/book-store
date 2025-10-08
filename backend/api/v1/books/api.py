@@ -3,7 +3,6 @@ from typing import List, AsyncGenerator
 from pydantic import UUID4
 from fastapi import APIRouter, FastAPI
 from backend.utils.logs import Logfire
-from datetime import datetime, timezone
 from backend.settings import Config
 from backend.api.v1.books.schemas import BookSchema
 from backend.database.books import BooksDB
@@ -25,6 +24,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator:
 
 @router.get('/books')
 async def get_all_books() -> List[dict]:
+# async def get_all_books(user_details: any = Depends(AccessTokenBearer)) -> List[dict]:
     return book.get_all_books()
 
 
@@ -39,14 +39,12 @@ async def get_book_by_title(book_title: str) -> BookSchema:
 
 
 @router.post('/book')
-async def add_book(title: str, author: str) -> None:
-    schema = BookSchema(title=title, author=author, publish_date=datetime.now(timezone.utc))
+async def add_book(schema: BookSchema) -> None:
     return book.add_book(schema=schema)
 
 
 @router.patch('/book')
-async def update_book(book_id: UUID4, title: str, author: str) -> None:
-    schema = BookSchema(id=book_id, title=title, author=author, publish_date=datetime.now(timezone.utc))
+async def update_book(schema: BookSchema) -> None:
     return book.update_book(schema=schema)
 
 
