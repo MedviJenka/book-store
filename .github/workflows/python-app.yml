@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Python application
+name: Bookstore
 
 on:
   push:
@@ -25,10 +22,10 @@ jobs:
       with:
         python-version: "3.12"
 
-    - name: Install minimal dependencies
+    - name: Install Flake and UV
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest uv logfire
+        pip install flake8 uv
 
     - name: Install main dependencies
       run: |
@@ -36,5 +33,4 @@ jobs:
         uv sync
 
     - name: Test with pytest
-      run: |
-        pytest
+      run: pytest

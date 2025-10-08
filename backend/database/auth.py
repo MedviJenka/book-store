@@ -23,18 +23,3 @@ class Auth(DatabaseManager):
         )
         log.fire.info(f'{response.model_dump()}')
         return response.model_dump()
-
-    def get_all_users(self) -> list[dict]:
-        headers = {"apikey": Config.SUPABASE_API_KEY, "Authorization": f"Bearer {Config.SUPABASE_ROLE_KEY}"}
-        r = requests.get(self.url, headers=headers, timeout=10)
-        r.raise_for_status()
-        data = r.json()
-        users = data["users"]
-        return users
-
-    def get_user_data_by_email_admin(self, email: str) -> Optional[dict]:
-        headers = {"apikey": Config.SUPABASE_API_KEY, "Authorization": f"Bearer {Config.SUPABASE_ROLE_KEY}"}
-        r = requests.get(self.url, headers=headers, params={"email": email}, timeout=10)
-        r.raise_for_status()
-        data = r.json()
-        return data

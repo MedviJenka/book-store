@@ -30,4 +30,4 @@ def health() -> HeathResponseSchema:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, host='0.0.0.0', port=89, use_colors=True)
+    uvicorn.run(app=app, host='0.0.0.0', port=5001, use_colors=True)
