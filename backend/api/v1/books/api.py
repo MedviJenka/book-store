@@ -24,7 +24,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator:
 
 @router.get('/books')
 async def get_all_books() -> List[dict]:
-# async def get_all_books(user_details: any = Depends(AccessTokenBearer)) -> List[dict]:
+    # async def get_all_books(user_details: any = Depends(AccessTokenBearer)) -> List[dict]:
     return book.get_all_books()
 
 
