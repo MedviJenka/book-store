@@ -16,3 +16,6 @@ CMD ["uvicorn", "backend.services.users:app", "--host", "0.0.0.0", "--port", "50
 
 FROM base AS auth
 CMD ["uvicorn", "backend.services.auth:app", "--host", "0.0.0.0", "--port", "5002"]
+
+FROM base AS app
+CMD uvicorn tests.app:app --host 0.0.0.0 --port 9876

@@ -65,6 +65,26 @@ services:
       type: api
       component: backend
 
+  app:
+    container_name: app
+    build:
+      context: .
+      target: app
+    ports:
+      - "9876:9876"
+    restart: unless-stopped
+    networks:
+      - my_network
+    env_file:
+      - .env
+    labels:
+      type: api
+      component: test
+    healthcheck:
+      test: curl -f localhost:9876/health
+      retries: 3
+      interval: 10s
+
 networks:
   my_network:
 
