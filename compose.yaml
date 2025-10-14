@@ -2,7 +2,7 @@ name: bookstore
 
 services:
 
-  books:
+  books-service:
     container_name: books-service
     build:
       context: .
@@ -18,14 +18,14 @@ services:
       interval: 10s
     env_file:
       - .env
-    depends_on:
-      - auth
-      - users
+#    depends_on:
+#      - auth-service
+#      - users-service
     labels:
       type: api
       component: backend
 
-  users:
+  users-service:
     container_name: user-service
     build:
       context: .
@@ -45,7 +45,7 @@ services:
       type: api
       component: backend
 
-  auth:
+  auth-service:
     container_name: auth-service
     build:
       context: .
