@@ -30,6 +30,7 @@ class UsersDatabase(Auth):
         r = requests.get(self.url, headers=headers, params={"email": email}, timeout=10)
         r.raise_for_status()
         data = r.json()
+        log.fire.info(f'{data}')
         return data
 
     def get_user_id_by_email(self, email: str) -> str:

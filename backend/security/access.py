@@ -1,38 +1,29 @@
-import jwt
-from typing import Union
-from uuid import uuid4
-from datetime import timedelta, datetime
-from backend.settings import Config
+from typing import Optional
+from fastapi import Request, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from backend.security.token_manager import TokenManager
 from backend.utils.logs import Logfire
-from backend.database.schemas import UserSchema
-from dataclasses import dataclass
+from backend.database.schemas import UserAccessSchema
 
 
-log = Logfire(name='token-session')
+log = Logfire(name="token-engine")
 
 
-@dataclass
-class TokenManager:
+class AccessTokenBearer(HTTPBearer):
 
-    user_schema: UserSchema
-    expire: Union[int, timedelta] = 3600
-    refresh: bool = False
+    def __init__(self, auto_error: bool = True) -> None:
+        super().__init__(auto_error=auto_error)
 
-    def create_access_token(self) -> str:
-
-        payload = {
-            'id': str(uuid4()),
-            'user': self.user_schema,
-            'exp': datetime.now() + timedelta(seconds=self.expire),
-            'refresh': self.refresh
-        }
-
-        token = jwt.encode(payload=payload, key=Config.SUPABASE_JWT_TOKEN, algorithm=Config.ALGORITHM)
-        log.fire.info('token created successfully')
-        return token
+    async def __call__(self, request: Request) -> Optional[HTTPAuthorizationCredentials]:
+        credentials = await super().__call__(request)
+        if credentials:
+            log.fire.info(f"Scheme: {credentials.scheme}")
+            log.fire.info(f"Credentials: {credentials.credentials}")
+            return credentials
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authorization")
 
     @staticmethod
-    def decode_token(token: str) -> None:
-        data = jwt.decode(jwt=token, key=Config.SUPABASE_JWT_TOKEN, algorithms=Config.ALGORITHM)
-        log.fire.info(f'data retrieved from token: {data}')
-        return data
+    def validate_token(token: str, email: str) -> bool:
+        token_manager = TokenManager(user_schema=UserAccessSchema(email=email))
+        token_data = token_manager.decode_token(token)
+        return token_data is not None

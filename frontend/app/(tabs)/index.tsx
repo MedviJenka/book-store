@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 
@@ -13,10 +14,12 @@ const getBooks = async ()=> {
 
 const App =()=> {
 
+    useEffect(()=> {getBooks()}, [])
+
     return(
         <View style={ styles.container }>
             <Text style={ styles.text }>
-                {getBooks()}
+                {getBooks().then(res => res.json())}
             </Text>
         </View>
     )

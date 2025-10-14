@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookstore
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore
+  namespace: bookstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: books
+          image: bookstore-books:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+        - name: auth
+          image: bookstore-users:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5001
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: books-service
+  namespace: bookstore
+spec:
+  selector:
+    app: fastapi
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+  namespace: bookstore
+spec:
+  selector:
+    app: fastapi
+  ports:
+    - port: 5001
+      targetPort: 5001
+  type: NodePort

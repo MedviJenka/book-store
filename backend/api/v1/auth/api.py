@@ -3,7 +3,7 @@ from typing import AsyncGenerator
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
 from backend.database.auth import Auth
-from backend.database.schemas import UserSchema
+from backend.database.schemas import UserAccessSchema
 from backend.security.access import TokenManager
 from backend.utils.logs import Logfire
 from backend.settings import Config
@@ -34,12 +34,12 @@ async def create_user(email: str) -> None:
 
 
 @router.post('/login')
-async def login(email: str) -> UserSchema or JSONResponse:
+async def login(email: str) -> UserAccessSchema or JSONResponse:
 
     user = users.get_user_data_by_email_admin(email)
     log.fire.info(f'user: {user}')
     # access_schema = UserSchema(email=email)
-    refresh_schema = UserSchema(email=email, is_created=True)
+    refresh_schema = UserAccessSchema(email=email, is_created=True)
 
     if user is not None:
         # access_token = TokenManager(user_schema=access_schema.model_dump())

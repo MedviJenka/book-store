@@ -1,10 +1,12 @@
 from typing import AsyncGenerator
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 from backend.database.auth import Auth
 from backend.utils.logs import Logfire
 from backend.settings import Config
 from contextlib import asynccontextmanager
 from backend.database.users import UsersDatabase
+from fastapi import APIRouter, Depends
+from backend.security.access import AccessTokenBearer
 
 
 log = Logfire(name='users-api')
@@ -15,12 +17,25 @@ users = UsersDatabase()
 
 auth = Auth()
 
+token_auth = AccessTokenBearer()
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator:
     log.fire.info('server started')
     yield
     log.fire.info('server stoped')
+
+
+@router.get("/me")
+async def get_user_info(email: str, credentials=Depends(token_auth)):
+    token = credentials.credentials
+
+    if not AccessTokenBearer.validate_token(token, email):
+        return {"error": "Invalid or expired token"}
+
+    log.fire.info({"status": "Access granted", "email": email})
+    return users.get_all_users()
 
 
 @router.get('/get-all-users')
